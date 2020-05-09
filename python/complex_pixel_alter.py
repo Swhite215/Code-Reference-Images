@@ -3,49 +3,54 @@ import numpy as np
 import timeit
 import sys
 
-oldImagePath = "../complex-pixels/ECRIC_UNCOLORIZED.png"
-newImagePath = "../new-images/ECRIC_COLOR_ATTEMPT_1.png"
 
-im = Image.open(oldImagePath)
+def complex_pixel_alter_twoColors():
+        oldImagePath = "../complex-pixels/ECRIC_UNCOLORIZED.png"
+        newImagePath = "../new-images/ECRIC_COLOR_ATTEMPT_1.png"
 
-print(im.format, im.size, im.mode)
+        im = Image.open(oldImagePath)
 
-pixels = im.load()
+        print(im.format, im.size, im.mode)
 
-# Show Current Image
-im.show()
+        pixels = im.load()
 
-# Important Values
-backgroundColorTuple = (255, 255, 255, 255)
-earthColorTuple = (228, 228, 228, 255)
-newBackgroundColorTuple = (25, 25, 25, 255)
-newEarthColorTuple = (30, 33, 83, 255)
+        # Show Current Image
+        im.show()
 
-# First Change Background Color
-for i in range(im.size[0]):
-        for j in range(im.size[1]):
-                if pixels[i,j] == (255, 255, 255, 255):
-                        pixels[i,j] = newBackgroundColorTuple
+        # Important Values
+        backgroundColorTuple = (255, 255, 255, 255)
+        earthColorTuple = (228, 228, 228, 255)
+        newBackgroundColorTuple = (25, 25, 25, 255)
+        newEarthColorTuple = (255, 255, 255, 255)
 
-# Generate Differences List
-remainingColors = []
-for i in range(im.size[0]):
-        for j in range(im.size[1]):
-                if pixels[i,j] != newBackgroundColorTuple:
-                        if pixels[i,j] not in remainingColors:
-                                remainingColors.append(pixels[i,j])
+        # First Change Background Color
+        for i in range(im.size[0]):
+                for j in range(im.size[1]):
+                        if pixels[i,j] == (255, 255, 255, 255):
+                                pixels[i,j] = newBackgroundColorTuple
 
-# Change Remaining to Single Color
-for i in range(im.size[0]):
-        for j in range(im.size[1]):
-                if pixels[i,j] in remainingColors and pixels[i,j] != newBackgroundColorTuple:
-                        pixels[i,j] = (255, 255, 255, 255)
+        # Generate Differences List
+        remainingColors = []
+        for i in range(im.size[0]):
+                for j in range(im.size[1]):
+                        if pixels[i,j] != newBackgroundColorTuple:
+                                if pixels[i,j] not in remainingColors:
+                                        remainingColors.append(pixels[i,j])
 
+        im.show()
+        sys.exit()
 
-#Show Altered Image
-im.show()
+        # Change Remaining to Single Color
+        for i in range(im.size[0]):
+                for j in range(im.size[1]):
+                        if pixels[i,j] in remainingColors and pixels[i,j] != newBackgroundColorTuple:
+                                pixels[i,j] = (255, 255, 255, 255)
 
-# Save Image
-im.save(newImagePath)
+        #Show Altered Image
+        im.show()
 
+        # Save Image
+        im.save(newImagePath)
 
+# Execution Time 1.38
+print(timeit.timeit(complex_pixel_alter_twoColors, number=1))
